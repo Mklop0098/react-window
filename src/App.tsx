@@ -200,11 +200,66 @@ function App() {
 
   console.log(postsData)
 
+  const divRef = useRef<any>();
+  const [opened, setOpened] = useState(false);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      // Handle resize event here
+      console.log('Div element resized', entries[0].contentRect.height);
+    });
+
+    if (divRef.current) {
+      observer.observe(divRef.current);
+    }
+
+    return () => {
+      if (divRef.current) {
+        observer.unobserve(divRef.current);
+      }
+    };
+  }, []);
+
+  function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  
+  const [a, setA] = useState<boolean>(false)
+
+  useEffect(() => {
+    delay(3000).then(() => setA(true))
+  }, [])
+
   return (
     <div className="App">
       <p>react-window</p>
+
+
+
+
+
+      <div
+        onResize={() => console.log('a')}
+        ref={divRef}
+        style={{display: 'flex', flexDirection: 'column', width: '300px', border: '1px solid black'}}
+      >
+        <span>hello</span>
+          {        
+            a && <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTveziXonPqtIcFuXPCQfZzkHBoCwbPRswaHg&usqp=CAU" alt="pic"/>
+          }      
+      </div>
+
+
+
+
+
+
+
+
+
+
       {/* <button onClick={() => posts.push({index: postsData.current.length, content: 'this is a very very long text this is a very very long text this is a very very long text ', title: 'this is title'})}>click me</button> */}
-      <VariableSizeList
+      {/* <VariableSizeList
         ref={listRef}
         innerRef={innerRef}
         itemData={data}
@@ -214,7 +269,9 @@ function App() {
         width={399}
       >
         {postRow}
-      </VariableSizeList>
+      </VariableSizeList> */}
+
+      
     </div>
   );
 }
